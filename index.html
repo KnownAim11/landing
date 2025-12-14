@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Website for your business in 5–7 days</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      background: #000000;
+      color: #ffffff;
+      line-height: 1.5;
+    }
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-svg {
+      height: 40px;
+      width: auto;
+    }
+    .logo-text {
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+    .header-tagline {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    main {
+      flex: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      width: 100%;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      color: #ffffff;
+      width: fit-content;
+    }
+    .hero-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      color: #9ca3af;
+      max-width: 520px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .points {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 14px;
+      color: #ffffff;
+    }
+    .points li {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .bullet {
+      width: 6px;
+      height: 6px;
+      margin-top: 7px;
+      border-radius: 999px;
+      background: #dc2626;
+      flex-shrink: 0;
+    }
+    .cta-box {
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .cta-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+    }
+    .price {
+      font-size: 16px;
+      color: #ffffff;
+    }
+    .cta-button {
+      margin-top: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      background: #dc2626;
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+      box-shadow: 0 10px 30px rgba(220, 38, 38, 0.25);
+    }
+    .cta-button:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 40px rgba(220, 38, 38, 0.35);
+    }
+    .cta-button:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.2);
+    }
+    .section-title {
+      margin-top: 40px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+    }
+    .calendar-section {
+      margin-top: 8px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 16px;
+    }
+    .calendar-note {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+    .calendar-wrapper {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000000;
+      min-height: 520px;
+    }
+    .calendar-iframe {
+      width: 100%;
+      min-height: 520px;
+      border: 0;
+    }
+    footer {
+      padding: 12px 24px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+      font-size: 12px;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    @media (max-width: 768px) {
+      header, main, footer {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .calendar-wrapper,
+      .calendar-iframe {
+        min-height: 580px;
+      }
+      .header-tagline {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stylized K: white vertical bar + red diagonal strokes -->
+          <g>
+            <!-- White vertical bar (left part) -->
+            <rect x="3" y="2" width="9" height="26" fill="#ffffff"/>
+            <!-- Red top diagonal stroke -->
+            <polygon points="12,2 12,13 25,2 30,2 18,13 30,24 25,24 12,13" fill="#dc2626"/>
+            <!-- Red bottom diagonal stroke -->
+            <polygon points="12,15 12,28 25,28 30,28 18,17 30,6 25,6 12,15" fill="#dc2626"/>
+          </g>
+          <!-- OVE text -->
+          <text x="38" y="19" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#ffffff">OVE</text>
+          <!-- MEDIA text -->
+          <text x="38" y="37" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#ffffff">MEDIA</text>
+        </svg>
+      </div>
+      <div class="header-tagline">Websites & ads for local US businesses</div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="badge">
+          <span>Simple website in 5–7 days</span>
+        </div>
+        <h1 class="hero-title">
+          Get a real website for your local business — not another template that does nothing
+        </h1>
+        <p class="hero-subtitle">
+          We build fast, simple websites for cleaners, contractors, beauty and other local services in the US — so people can actually find you and contact you.
+        </p>
+        <div class="hero-grid">
+          <ul class="points">
+            <li>
+              <span class="bullet"></span>
+              <div>Most projects: <strong>$200–$500</strong>, one-time payment. No monthly "website subscription" fees.</div>
+            </li>
+            <li>
+              <span class="bullet"></span>
+              <div>Built to get you calls, quote requests and bookings — not just "look nice".</div>
+            </li>
+            <li>
+              <span class="bullet"></span>
+              <div>Mobile-first, fast loading, clear call-to-action, connected to your phone, email or CRM.</div>
+            </li>
+            <li>
+              <span class="bullet"></span>
+              <div>When the site is live, we can also set up basic ads to start bringing you clients.</div>
+            </li>
+          </ul>
+          <div class="cta-box">
+            <div class="cta-label">Step 2 of 2</div>
+            <div class="price">
+              Book a <strong>free 30-min call</strong> to see if we're a good fit and get your exact price.
+            </div>
+            <div style="font-size:13px;color:#9ca3af;">
+              On this call we look at your business, what you offer and how you get clients now — then suggest the simplest website + ad plan that makes sense for you.
+            </div>
+            <a href="#calendar" class="cta-button">
+              Book a time
+            </a>
+          </div>
+        </div>
+      </section>
+      <section id="calendar">
+        <h2 class="section-title">Book your time</h2>
+        <div class="calendar-section">
+          <p class="calendar-note">
+            Pick a free 30-minute slot that works for you. We'll meet on Zoom or phone, whatever is easier, and you'll get a clear quote before we start.
+          </p>
+          <div class="calendar-wrapper">
+            <!-- ВСТАВЬ СВОЙ КАЛЕНДАРЬ СЮДА -->
+            <!-- Пример для Calendly: замените your-name/15min на свою ссылку -->
+            <iframe
+              class="calendar-iframe"
+              src="https://calendly.com/max-kove/30min"
+              scrolling="no">
+            </iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div>© 2025 Kove Media</div>
+      <div>Websites & simple ads for small local businesses</div>
+    </footer>
+  </div>
+</body>
+</html>
