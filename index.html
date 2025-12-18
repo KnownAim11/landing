@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Book your time - Kove Media</title>
+  <title>Website for your local business in 3–5 days</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="alternate icon" href="favicon.ico" />
@@ -69,89 +69,108 @@
       padding: 32px 24px 48px;
       width: 100%;
     }
-    .section-title {
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: #9ca3af;
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 48px;
     }
-    .calendar-section {
+    .hero-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+    .hero-subtitle {
+      font-size: 18px;
+      color: #ffffff;
+      font-weight: 500;
+      max-width: 600px;
+    }
+    .hero-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       margin-top: 8px;
-      border-radius: 16px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 16px;
     }
-    .calendar-note {
-      font-size: 13px;
-      color: #9ca3af;
-      margin-bottom: 8px;
+    .hero-feature {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 15px;
+      color: #ffffff;
     }
-    .calendar-wrapper {
-      border-radius: 12px;
-      overflow: hidden;
-      background: #000000;
-      min-height: 520px;
+    .hero-feature-label {
+      font-weight: 600;
+      min-width: 80px;
     }
-    .calendar-iframe {
-      width: 100%;
-      min-height: 520px;
-      border: 0;
+    .hero-feature-text {
+      color: #e5e7eb;
     }
-    .info-box {
+    .call-section {
+      margin-top: 40px;
       border-radius: 16px;
       padding: 24px;
       background: rgba(0, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-bottom: 24px;
-      text-align: left;
+      max-width: 600px;
     }
-    .info-title {
-      font-size: 16px;
+    .call-title {
+      font-size: 20px;
       font-weight: 600;
       color: #ffffff;
       margin-bottom: 16px;
     }
-    .info-list {
-      list-style: none;
-      margin-top: 12px;
+    .call-text {
+      font-size: 15px;
+      color: #e5e7eb;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
-    .info-list li {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      margin-bottom: 8px;
-      font-size: 14px;
+    .call-payment-note {
+      font-size: 15px;
       color: #ffffff;
-    }
-    .info-bullet {
-      width: 6px;
-      height: 6px;
-      margin-top: 7px;
-      border-radius: 999px;
-      background: #dc2626;
-      flex-shrink: 0;
-    }
-    .back-button {
-      display: inline-block;
+      font-weight: 500;
       margin-top: 16px;
-      padding: 10px 24px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .call-optional {
       font-size: 14px;
+      color: #9ca3af;
+      margin-top: 16px;
+      font-style: italic;
+    }
+    .cta-button {
+      margin-top: 20px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
       font-weight: 600;
-      background: transparent;
+      background: #dc2626;
       color: #ffffff;
       text-align: center;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+      box-shadow: 0 10px 30px rgba(220, 38, 38, 0.25);
+      display: block;
+      width: 100%;
     }
-    .back-button:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.5);
+    .cta-button:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 40px rgba(220, 38, 38, 0.35);
+    }
+    .cta-button:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.2);
+    }
+    .cta-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
     }
     footer {
       padding: 12px 24px 24px;
@@ -173,9 +192,18 @@
       .header-tagline {
         display: none;
       }
-      .calendar-wrapper,
-      .calendar-iframe {
-        min-height: 580px;
+      .hero-feature {
+        flex-direction: column;
+        gap: 4px;
+      }
+      .hero-feature-label {
+        min-width: auto;
+      }
+      .call-section {
+        padding: 20px;
+      }
+      .call-title {
+        font-size: 18px;
       }
     }
   </style>
@@ -203,48 +231,49 @@
       <div class="header-tagline">Websites & ads for local US businesses</div>
     </header>
     <main>
-      <h2 class="section-title">Book your time</h2>
-
-      <div class="info-box">
-        <div class="info-title">To make the most of our 30 minutes, we'll quickly cover:</div>
-        <ul class="info-list">
-          <li>
-            <span class="info-bullet"></span>
-            <div>What your business does and who your ideal client is</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div>If you already have a website and what needs to change</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div>What you want your new site to do first (calls, quotes, bookings)</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div>Your comfortable budget and timeline</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div><strong>(Optional)</strong> A simple ad plan so your site can start bringing you new clients</div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="calendar-section">
-        <p class="calendar-note">
-          Pick a free 30-minute slot that works for you.
+      <section class="hero">
+        <h1 class="hero-title">
+          Website for your local business in 3–5 days
+        </h1>
+        <p class="hero-subtitle">
+          We build fast websites for cleaners, contractors, beauty and other local services in the US — tailored to your business.
         </p>
-        <div class="calendar-wrapper">
-          <iframe
-            class="calendar-iframe"
-            src="https://calendly.com/max-kove/30min"
-            scrolling="no">
-          </iframe>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <span class="hero-feature-label">Price:</span>
+            <span class="hero-feature-text">most websites are $200–$500 one-time, no monthly "website subscription" fees.</span>
+          </div>
+          <div class="hero-feature">
+            <span class="hero-feature-label">Timeline:</span>
+            <span class="hero-feature-text">your website is usually ready in 3–5 days.</span>
+          </div>
+          <div class="hero-feature">
+            <span class="hero-feature-label">Payment:</span>
+            <span class="hero-feature-text">you pay only after you see and approve your website.</span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <a href="index.html" class="back-button">Back to homepage</a>
+      <section class="call-section">
+        <h2 class="call-title">Free 30-min call: see if this is right for you</h2>
+        <p class="call-text">
+          On this call I'll ask a few simple questions about your business,<br>
+          suggest what kind of website makes sense for you,<br>
+          and give you a clear price and timeline.
+        </p>
+        <p class="call-payment-note">
+          If you like the plan, I build the site — you pay only after you approve it.
+        </p>
+        <p class="call-optional">
+          When your website is ready, we can also discuss simple ad options so this site can start bringing you new clients.
+        </p>
+        <a href="thank-you.html" class="cta-button">
+          Get my website plan & price
+        </a>
+        <div class="cta-note">
+          Free 30-min call • No obligation • Pay only after approval
+        </div>
+      </section>
     </main>
     <footer>
       <div>© 2025 Kove Media</div>
