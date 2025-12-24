@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Book your time - Kove Media</title>
+  <title>Application Received - Kove Media</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="alternate icon" href="favicon.ico" />
@@ -69,25 +69,118 @@
       padding: 32px 24px 48px;
       width: 100%;
     }
-    .section-title {
-      margin-top: 0;
+    .confirmation-box {
+      border-radius: 16px;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .confirmation-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
       margin-bottom: 12px;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
+    }
+    .confirmation-text {
+      font-size: 15px;
       color: #9ca3af;
+      line-height: 1.6;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .speed-offer-box {
+      border-radius: 16px;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .speed-offer-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .speed-offer-list {
+      list-style: none;
+    }
+    .speed-offer-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      font-size: 15px;
+      color: #ffffff;
+    }
+    .speed-offer-list li:last-child {
+      margin-bottom: 0;
+    }
+    .bullet {
+      width: 6px;
+      height: 6px;
+      margin-top: 7px;
+      border-radius: 999px;
+      background: #dc2626;
+      flex-shrink: 0;
+    }
+    .stress-relief-box {
+      border-radius: 16px;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .stress-relief-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .stress-relief-steps {
+      list-style: none;
+      margin-bottom: 0;
+    }
+    .stress-relief-steps li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #ffffff;
+    }
+    .stress-relief-steps li:last-child {
+      margin-bottom: 0;
+    }
+    .step-number {
+      font-weight: 700;
+      color: #dc2626;
+      min-width: 60px;
+      font-size: 14px;
+    }
+    .stress-relief-note {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: 12px;
+      font-style: italic;
     }
     .calendar-section {
-      margin-top: 8px;
       border-radius: 16px;
       background: rgba(0, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 16px;
+      margin-bottom: 24px;
     }
-    .calendar-note {
-      font-size: 13px;
-      color: #9ca3af;
-      margin-bottom: 8px;
+    .calendar-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 16px;
+      text-align: center;
     }
     .calendar-wrapper {
       border-radius: 12px;
@@ -100,58 +193,13 @@
       min-height: 520px;
       border: 0;
     }
-    .info-box {
-      border-radius: 16px;
-      padding: 24px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-bottom: 24px;
-      text-align: left;
-    }
-    .info-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #ffffff;
-      margin-bottom: 16px;
-    }
-    .info-list {
-      list-style: none;
-      margin-top: 12px;
-    }
-    .info-list li {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #ffffff;
-    }
-    .info-bullet {
-      width: 6px;
-      height: 6px;
-      margin-top: 7px;
-      border-radius: 999px;
-      background: #dc2626;
-      flex-shrink: 0;
-    }
-    .back-button {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 10px 24px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      background: transparent;
-      color: #ffffff;
+    .footer-option {
       text-align: center;
-      text-decoration: none;
-      transition: all 0.2s ease;
+      margin-top: 16px;
     }
-    .back-button:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.5);
+    .footer-text {
+      color: #6b7280;
+      font-size: 13px;
     }
     footer {
       padding: 12px 24px 24px;
@@ -172,6 +220,12 @@
       }
       .header-tagline {
         display: none;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .speed-offer-title {
+        font-size: 20px;
       }
       .calendar-wrapper,
       .calendar-iframe {
@@ -203,38 +257,65 @@
       <div class="header-tagline">Websites & ads for local US businesses</div>
     </header>
     <main>
-      <h2 class="section-title">Book your time</h2>
-
-      <div class="info-box">
-        <div class="info-title">To make the most of our 10 minutes, we'll quickly cover:</div>
-        <ul class="info-list">
-          <li>
-            <span class="info-bullet"></span>
-            <div>What your business does and who your ideal client is</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div>If you already have a website and what needs to change</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div>What you want your new site to do first (calls, quotes, bookings)</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div>Your comfortable budget and timeline</div>
-          </li>
-          <li>
-            <span class="info-bullet"></span>
-            <div><strong>(Optional)</strong> An ad plan so your site can start bringing you new clients</div>
-          </li>
-        </ul>
+      <!-- 1. Top confirmation box -->
+      <div class="confirmation-box">
+        <div class="confirmation-title">You're almost done – book your 10‑minute call for 24‑Hour Express Start.</div>
+        <div class="confirmation-text">
+          Standard turnaround is 3–5 days. If you pick a time below, we'll fast‑track your project and have your design ready 24 hours after our call, at no extra cost.
+        </div>
       </div>
 
+      <!-- 2. Two cards side by side -->
+      <div class="cards-grid">
+        <!-- Card 1: Speed Offer -->
+        <div class="speed-offer-box">
+          <h2 class="speed-offer-title">Fast-Track your project: Ready in 24 Hours.</h2>
+          <ul class="speed-offer-list">
+            <li>
+              <span class="bullet"></span>
+              <span>Skip the 3–5 day wait.</span>
+            </li>
+            <li>
+              <span class="bullet"></span>
+              <span>10‑minute call to confirm details.</span>
+            </li>
+            <li>
+              <span class="bullet"></span>
+              <span>Full design ready 24 hours after we hang up.</span>
+            </li>
+            <li>
+              <span class="bullet"></span>
+              <span>Same price. No extra cost.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Stress Relief -->
+        <div class="stress-relief-box">
+          <h3 class="stress-relief-title">What happens on this 10-min call? (Don't worry, this is NOT a sales pitch)</h3>
+          <ul class="stress-relief-steps">
+            <li>
+              <span class="step-number">Step 1:</span>
+              <span>You show me your logo (or I suggest one).</span>
+            </li>
+            <li>
+              <span class="step-number">Step 2:</span>
+              <span>We pick a color scheme you like.</span>
+            </li>
+            <li>
+              <span class="step-number">Step 3:</span>
+              <span>I start working on your design immediately.</span>
+            </li>
+          </ul>
+          <p class="stress-relief-note">
+            ☕️ No pressure. No long interview. Just a quick chat to get it right.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3. Calendar section -->
       <div class="calendar-section">
-        <p class="calendar-note">
-          Pick a free 10-minute slot that works for you.
-        </p>
+        <h3 class="calendar-title">Select a time for your 24‑Hour Express Start below.</h3>
         <div class="calendar-wrapper">
           <iframe
             class="calendar-iframe"
@@ -244,13 +325,17 @@
         </div>
       </div>
 
-      <a href="index.html" class="back-button">Back to homepage</a>
+      <!-- 4. Footer option -->
+      <div class="footer-option">
+        <div class="footer-text">
+          Prefer standard 3–5 day turnaround? You can simply close this page.
+        </div>
+      </div>
     </main>
     <footer>
       <div>© 2025 Kove Media</div>
-      <div>Websites & ads for small local businesses</div>
+      <div>Websites & simple ads for small local businesses</div>
     </footer>
   </div>
 </body>
 </html>
-  
