@@ -1,0 +1,9 @@
+{
+  "name": "kove-media-landing",
+  "version": "1.0.0",
+  "description": "Landing page for Kove Media",
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  }
+}
+
