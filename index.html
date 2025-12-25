@@ -491,13 +491,13 @@
           Get my website plan & price
         </button>
         <div class="cta-note">
-           • No obligation • Pay only after approval
+          Free 30-min call • No obligation • Pay only after approval
         </div>
       </section>
     </main>
     <footer>
       <div>© 2025 Kove Media</div>
-      <div>Websites & ads for small local businesses</div>
+      <div>Websites & simple ads for small local businesses</div>
     </footer>
   </div>
 
@@ -688,8 +688,15 @@
       try {
         console.log('Sending form data:', formData);
         
-        // Используем API endpoint Vercel
-        const apiUrl = '/api/send-email';
+        // Используем API endpoint Vercel (пробуем разные варианты)
+        let apiUrl = '/api/send-email';
+        
+        // Если относительный путь не работает, пробуем абсолютный
+        if (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('localhost')) {
+          apiUrl = window.location.origin + '/api/send-email';
+        }
+        
+        console.log('API URL:', apiUrl);
         
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -700,9 +707,13 @@
         });
         
         console.log('Response status:', response.status);
+        console.log('Response URL:', response.url);
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          // Пробуем получить текст ошибки
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
+          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
         
         const result = await response.json();
@@ -716,7 +727,18 @@
         }
       } catch (error) {
         console.error('Request error:', error);
-        alert('Ошибка при отправке формы: ' + error.message + '\n\nПроверьте:\n1. API endpoint настроен на Vercel\n2. Переменные окружения EMAIL_USER и EMAIL_PASS установлены\n3. Консоль браузера (F12) для деталей');
+        console.error('Full error:', error.stack);
+        
+        // Более информативное сообщение
+        let errorMsg = 'Ошибка при отправке формы: ' + error.message;
+        errorMsg += '\n\nПроверьте:\n';
+        errorMsg += '1. Файл api/send-email.js загружен на GitHub\n';
+        errorMsg += '2. Vercel пересобрал проект после загрузки\n';
+        errorMsg += '3. В Vercel Dashboard → Deployments → Functions есть api/send-email\n';
+        errorMsg += '4. Переменные окружения EMAIL_USER и EMAIL_PASS установлены\n';
+        errorMsg += '5. Откройте консоль (F12) для деталей';
+        
+        alert(errorMsg);
         // Continue anyway - form is submitted
       }
       
