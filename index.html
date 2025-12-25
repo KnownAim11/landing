@@ -491,13 +491,13 @@
           Get my website plan & price
         </button>
         <div class="cta-note">
-           • No obligation • Pay only after approval
+          Free 30-min call • No obligation • Pay only after approval
         </div>
       </section>
     </main>
     <footer>
       <div>© 2025 Kove Media</div>
-      <div>Websites & ads for small local businesses</div>
+      <div>Websites & simple ads for small local businesses</div>
     </footer>
   </div>
 
@@ -684,9 +684,14 @@
         fbq('track', 'Lead');
       }
       
-      // Send data to PHP script
+      // Send data to Vercel API
       try {
-        const response = await fetch('send-email.php', {
+        console.log('Sending form data:', formData);
+        
+        // Используем API endpoint Vercel
+        const apiUrl = '/api/send-email';
+        
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -694,13 +699,24 @@
           body: JSON.stringify(formData)
         });
         
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
+        console.log('Response result:', result);
         
         if (!result.success) {
           console.error('Email sending error:', result.message);
+          alert('Ошибка отправки: ' + result.message + '\n\nПроверьте консоль (F12) для деталей.');
+        } else {
+          console.log('✅ Email sent successfully!');
         }
       } catch (error) {
         console.error('Request error:', error);
+        alert('Ошибка при отправке формы: ' + error.message + '\n\nПроверьте:\n1. API endpoint настроен на Vercel\n2. Переменные окружения EMAIL_USER и EMAIL_PASS установлены\n3. Консоль браузера (F12) для деталей');
         // Continue anyway - form is submitted
       }
       
