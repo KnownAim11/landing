@@ -1,29 +1,9 @@
 import { useEffect } from 'react';
+import Head from 'next/head';
+import Script from 'next/script';
 
 export default function Home() {
   useEffect(() => {
-    // Meta Pixel Code - инициализация
-    if (typeof window.fbq === 'undefined') {
-      (function(f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function() {
-          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-      window.fbq('init', '1576408533546400');
-      window.fbq('track', 'PageView');
-    }
-
     // Этот блок принудительно запускает логику модалок и формы после загрузки страницы
     const openModalBtn = document.getElementById('openModalBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
@@ -573,10 +553,6 @@ export default function Home() {
   `;
 
   const htmlContent = `
-    <style>${cssStyles}</style>
-    <noscript>
-      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1576408533546400&ev=PageView&noscript=1" />
-    </noscript>
     <div class="page">
       <header>
         <div class="logo-container">
@@ -704,11 +680,39 @@ export default function Home() {
   `;
 
   return (
-    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+    <>
+      <Head>
+        <title>Website for your local business in 3–5 days</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
+        <noscript>
+          <img height="1" width="1" style={{ display: 'none' }} src="https://www.facebook.com/tr?id=1576408533546400&ev=PageView&noscript=1" />
+        </noscript>
+      </Head>
+      
+      {/* Meta Pixel Script */}
+      <Script
+        id="facebook-pixel"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1576408533546400');
+            fbq('track', 'PageView');
+          `,
+        }}
+      />
+
+      <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+    </>
   );
 }
 
-  return (
-    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-  );
-}
