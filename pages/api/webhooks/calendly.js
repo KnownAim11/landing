@@ -7,15 +7,15 @@ export default async function handler(req, res) {
 
   try {
     const data = req.body;
-    // Точный путь из ваших логов: payload.email
+    // Берем email напрямую из payload.email, как показал твой успешный лог
     const rawEmail = data?.payload?.email;
 
     if (!rawEmail) {
-      console.log("⚠️ Email не найден в payload. Проверьте структуру данных.");
+      console.log("⚠️ Email не найден в данных Calendly.");
       return res.status(200).json({ status: "No email found" });
     }
 
-    // Хешируем email для Meta (обязательное требование Facebook API)
+    // Хешируем для Meta (обязательно)
     const hashedEmail = crypto.createHash('sha256').update(rawEmail.trim().toLowerCase()).digest('hex');
 
     const FACEBOOK_ACCESS_TOKEN = process.env.FACEBOOK_ACCESS_TOKEN;
@@ -33,7 +33,8 @@ export default async function handler(req, res) {
             em: [hashedEmail]
           }
         }],
-        access_token: FACEBOOK_ACCESS_TOKEN
+        access_token: FACEBOOK_ACCESS_TOKEN,
+        test_event_code: 'TEST6399' // Код для мгновенного появления в Meta
       }),
     });
 
@@ -49,10 +50,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error("❌ КРИТИЧЕСКАЯ ОШИБКА:", error.message);
-    return res.status(500).json({ error: error.message });
-  }
-}
-    console.error("❌ ОШИБКА:", error.message);
     return res.status(500).json({ error: error.message });
   }
 }
