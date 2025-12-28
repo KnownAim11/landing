@@ -1,87 +1,48 @@
-import crypto from 'crypto';
-
-const FACEBOOK_DATASET_ID = '4530724333821963';
-
-const FACEBOOK_ACCESS_TOKEN = process.env.FACEBOOK_ACCESS_TOKEN;
-
-if (!FACEBOOK_ACCESS_TOKEN) {
-  console.error('FACEBOOK_ACCESS_TOKEN environment variable is not set');
-}
-
-const FACEBOOK_API_VERSION = 'v24.0';
-
-function hashData(data) {
-  if (!data) return null;
-  return crypto
-    .createHash('sha256')
-    .update(data.trim().toLowerCase())
-    .digest('hex');
-}
-
 export default async function handler(req, res) {
+  // 1. Проверяем, что это POST-запрос (от Calendly)
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  if (!FACEBOOK_ACCESS_TOKEN) {
-    return res.status(500).json({ 
-      error: 'FACEBOOK_ACCESS_TOKEN is not configured. Please set it in environment variables.' 
-    });
+    return res.status(200).json({ message: "Webhook is active. Waiting for Calendly POST request." });
   }
 
   try {
-    const { data } = req.body;
-    const invitee = data.invitee;
+    const body = req.body;
+    
+    // 2. Безопасно достаем email с проверкой (защита от вашей ошибки)
+    const inviteeEmail = body.payload?.invitee?.email;
 
-    const userData = {
-      em: hashData(invitee.email),
-    };
-
-    if (invitee.phone_number) {
-      userData.ph = hashData(invitee.phone_number);
+    if (!inviteeEmail) {
+      console.log("No invitee email found in payload");
+      return res.status(200).json({ status: "No data to send" });
     }
 
-    const payload = {
-      data: [
-        {
-          action_source: 'system_generated',
+    const FACEBOOK_ACCESS_TOKEN = process.env.FACEBOOK_ACCESS_TOKEN;
+    const FACEBOOK_DATASET_ID = '4530724333821963';
+
+    // 3. Отправляем данные в Meta
+    const fbResponse = await fetch(`https://graph.facebook.com/v17.0/${FACEBOOK_DATASET_ID}/events`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: [{
           event_name: 'Lead',
-          event_time: Math.floor(
-            new Date(invitee.created_at).getTime() / 1000
-          ),
-          user_data: userData,
-          custom_data: {
-            event_source: 'crm',
-            lead_event_source: 'Calendly',
-          },
-        },
-      ],
-    };
+          event_time: Math.floor(Date.now() / 1000),
+          action_source: 'system_generated',
+          user_data: {
+            em: [inviteeEmail] // Отправляем найденный email
+          }
+        }],
+        access_token: FACEBOOK_ACCESS_TOKEN
+      }),
+    });
 
-    const response = await fetch(
-      `https://graph.facebook.com/${FACEBOOK_API_VERSION}/${FACEBOOK_DATASET_ID}/events`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${FACEBOOK_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      }
-    );
+    console.log(`Event sent to Meta for: ${inviteeEmail}`);
+    return res.status(200).json({ success: true });
 
-    const responseData = await response.json();
-
-    if (!response.ok) {
-      console.error('Meta API Error:', responseData);
-      return res.status(400).json({ error: responseData });
-    }
-
-    console.log('Event sent to Meta:', responseData);
-    return res.status(200).json({ success: true, data: responseData });
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Webhook Error:", error.message);
     return res.status(500).json({ error: error.message });
+  }
+}
   }
 }
 
