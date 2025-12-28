@@ -1,24 +1,27 @@
 export default async function handler(req, res) {
-  // 1. Проверяем, что это POST-запрос (от Calendly)
+  // 1. Защита от открытия в браузере: разрешаем только POST-запросы
   if (req.method !== 'POST') {
-    return res.status(200).json({ message: "Webhook is active. Waiting for Calendly POST request." });
+    return res.status(200).json({ 
+      status: "Active", 
+      message: "Webhook is working. Send a POST request from Calendly to trigger it." 
+    });
   }
 
   try {
-    const body = req.body;
-    
-    // 2. Безопасно достаем email с проверкой (защита от вашей ошибки)
-    const inviteeEmail = body.payload?.invitee?.email;
+    // 2. Безопасное получение данных с помощью опциональной цепочки (?.)
+    const payload = req.body?.payload;
+    const inviteeEmail = payload?.invitee?.email;
 
+    // 3. Если данных нет, просто выходим без ошибки
     if (!inviteeEmail) {
-      console.log("No invitee email found in payload");
-      return res.status(200).json({ status: "No data to send" });
+      console.log("⚠️ Получен пустой POST-запрос или формат данных неверный.");
+      return res.status(200).json({ status: "No email data found" });
     }
 
+    // 4. Параметры Meta (Проверьте, что TOKEN добавлен в Settings -> Environment Variables)
     const FACEBOOK_ACCESS_TOKEN = process.env.FACEBOOK_ACCESS_TOKEN;
     const FACEBOOK_DATASET_ID = '4530724333821963';
 
-    // 3. Отправляем данные в Meta
     const fbResponse = await fetch(`https://graph.facebook.com/v17.0/${FACEBOOK_DATASET_ID}/events`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -28,21 +31,19 @@ export default async function handler(req, res) {
           event_time: Math.floor(Date.now() / 1000),
           action_source: 'system_generated',
           user_data: {
-            em: [inviteeEmail] // Отправляем найденный email
+            em: [inviteeEmail] 
           }
         }],
         access_token: FACEBOOK_ACCESS_TOKEN
       }),
     });
 
-    console.log(`Event sent to Meta for: ${inviteeEmail}`);
+    console.log(`✅ Данные успешно отправлены в Meta для: ${inviteeEmail}`);
     return res.status(200).json({ success: true });
 
   } catch (error) {
-    console.error("Webhook Error:", error.message);
+    console.error("❌ Ошибка в обработчике вебхука:", error.message);
     return res.status(500).json({ error: error.message });
-  }
-}
   }
 }
 
