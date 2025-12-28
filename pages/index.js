@@ -1,29 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Website for your local business in 3–5 days</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="alternate icon" href="favicon.ico" />
-  <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1576408533546400');
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1576408533546400&ev=PageView&noscript=1"
-  /></noscript>
-  <!-- End Meta Pixel Code -->
-  <style>
+import { useEffect } from 'react';
+
+export default function Home() {
+  useEffect(() => {
+    // Meta Pixel Code - инициализация
+    if (typeof window.fbq === 'undefined') {
+      (function(f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function() {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', '1576408533546400');
+      window.fbq('track', 'PageView');
+    }
+
+    // Этот блок принудительно запускает логику модалок и формы после загрузки страницы
+    const openModalBtn = document.getElementById('openModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const successModalOverlay = document.getElementById('successModalOverlay');
+    const proposalForm = document.getElementById('proposalForm');
+
+    if (openModalBtn) {
+      openModalBtn.onclick = () => {
+        if (modalOverlay) {
+          modalOverlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+    }
+
+    if (closeModalBtn) {
+      closeModalBtn.onclick = () => {
+        if (modalOverlay) {
+          modalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+    }
+
+    // Close modal when clicking outside
+    if (modalOverlay) {
+      modalOverlay.onclick = (e) => {
+        if (e.target === modalOverlay) {
+          modalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+    }
+
+    // Close success modal when clicking outside
+    if (successModalOverlay) {
+      successModalOverlay.onclick = (e) => {
+        if (e.target === successModalOverlay) {
+          successModalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+    }
+
+    // Close modal on Escape key
+    const handleKeydown = (e) => {
+      if (e.key === 'Escape') {
+        if (modalOverlay && modalOverlay.classList.contains('active')) {
+          modalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+        if (successModalOverlay && successModalOverlay.classList.contains('active')) {
+          successModalOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeydown);
+
+    // Form submission
+    if (proposalForm) {
+      proposalForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = {
+          fullName: document.getElementById('fullName')?.value,
+          email: document.getElementById('email')?.value,
+          mobilePhone: document.getElementById('mobilePhone')?.value,
+          industry: document.getElementById('industry')?.value,
+          hasWebsite: document.querySelector('input[name="hasWebsite"]:checked')?.value,
+          timeline: document.querySelector('input[name="timeline"]:checked')?.value,
+          calendarLink: window.location.origin + window.location.pathname.replace('index.html', 'thank-you.html')
+        };
+
+        // Track form submission in Meta Pixel
+        if (typeof window.fbq !== 'undefined') {
+          window.fbq('track', 'Lead');
+        }
+
+        try {
+          console.log('Sending form data:', formData);
+
+          let apiUrl = '/api/send-email';
+          if (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('localhost')) {
+            apiUrl = window.location.origin + '/api/send-email';
+          }
+
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+          }
+
+          const result = await response.json();
+          console.log('Response result:', result);
+
+          if (!result.success) {
+            console.error('Email sending error:', result.message);
+            alert('Ошибка отправки: ' + result.message + '\n\nПроверьте консоль (F12) для деталей.');
+          } else {
+            console.log('✅ Email sent successfully!');
+          }
+
+          // Hide form modal and show success modal
+          if (modalOverlay) {
+            modalOverlay.classList.remove('active');
+          }
+          if (successModalOverlay) {
+            successModalOverlay.classList.add('active');
+          }
+        } catch (error) {
+          console.error('Request error:', error);
+          let errorMsg = 'Ошибка при отправке формы: ' + error.message;
+          errorMsg += '\n\nПроверьте:\n';
+          errorMsg += '1. Файл api/send-email.js загружен на GitHub\n';
+          errorMsg += '2. Vercel пересобрал проект после загрузки\n';
+          errorMsg += '3. В Vercel Dashboard → Deployments → Functions есть api/send-email\n';
+          errorMsg += '4. Переменные окружения EMAIL_USER и EMAIL_PASS установлены\n';
+          errorMsg += '5. Откройте консоль (F12) для деталей';
+          alert(errorMsg);
+          
+          // Continue anyway - show success modal
+          if (modalOverlay) {
+            modalOverlay.classList.remove('active');
+          }
+          if (successModalOverlay) {
+            successModalOverlay.classList.add('active');
+          }
+        }
+      };
+    }
+
+    // Cleanup function
+    return () => {
+      document.removeEventListener('keydown', handleKeydown);
+    };
+  }, []);
+
+  // Extract CSS from original index.html
+  const cssStyles = `
     * {
       box-sizing: border-box;
       margin: 0;
@@ -134,12 +281,6 @@
       margin-top: 16px;
       margin-bottom: 12px;
     }
-    .call-optional {
-      font-size: 14px;
-      color: #9ca3af;
-      margin-top: 16px;
-      font-style: italic;
-    }
     .cta-button {
       margin-top: 20px;
       padding: 14px 24px;
@@ -172,7 +313,6 @@
       color: #9ca3af;
       text-align: center;
     }
-    /* Modal Styles */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -339,7 +479,6 @@
       transform: translateY(1px);
       box-shadow: 0 6px 18px rgba(220, 38, 38, 0.2);
     }
-    /* Success Modal Styles */
     .success-modal-content {
       background: #000000;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -431,323 +570,145 @@
         font-size: 14px;
       }
     }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <header>
-      <div class="logo-container">
-        <svg class="logo-svg" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
-          <!-- Stylized K: white vertical bar + red diagonal strokes -->
-          <g>
-            <!-- White vertical bar (left part) -->
-            <rect x="3" y="2" width="9" height="26" fill="#ffffff"/>
-            <!-- Red top diagonal stroke -->
-            <polygon points="12,2 12,13 25,2 30,2 18,13 30,24 25,24 12,13" fill="#dc2626"/>
-            <!-- Red bottom diagonal stroke -->
-            <polygon points="12,15 12,28 25,28 30,28 18,17 30,6 25,6 12,15" fill="#dc2626"/>
-          </g>
-          <!-- OVE text -->
-          <text x="38" y="19" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#ffffff">OVE</text>
-          <!-- MEDIA text -->
-          <text x="38" y="37" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#ffffff">MEDIA</text>
-        </svg>
+  `;
+
+  const htmlContent = `
+    <style>${cssStyles}</style>
+    <noscript>
+      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1576408533546400&ev=PageView&noscript=1" />
+    </noscript>
+    <div class="page">
+      <header>
+        <div class="logo-container">
+          <svg class="logo-svg" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <rect x="3" y="2" width="9" height="26" fill="#ffffff"/>
+              <polygon points="12,2 12,13 25,2 30,2 18,13 30,24 25,24 12,13" fill="#dc2626"/>
+              <polygon points="12,15 12,28 25,28 30,28 18,17 30,6 25,6 12,15" fill="#dc2626"/>
+            </g>
+            <text x="38" y="19" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#ffffff">OVE</text>
+            <text x="38" y="37" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#ffffff">MEDIA</text>
+          </svg>
+        </div>
+        <div class="header-tagline">Websites & ads for local US businesses</div>
+      </header>
+      <main>
+        <section class="hero">
+          <h1 class="hero-title">Website for your local business in 3–5 days</h1>
+          <p class="hero-subtitle">
+            We build fast websites for cleaners, contractors, beauty and other local services in the US — tailored to your business.
+          </p>
+          <div class="hero-features">
+            <div class="hero-feature">
+              <span class="hero-feature-label">Price:</span>
+              <span class="hero-feature-text">most websites are $200–$500 one-time, no monthly "website subscription" fees.</span>
+            </div>
+            <div class="hero-feature">
+              <span class="hero-feature-label">Timeline:</span>
+              <span class="hero-feature-text">your website is usually ready in 3–5 days.</span>
+            </div>
+            <div class="hero-feature">
+              <span class="hero-feature-label">Payment:</span>
+              <span class="hero-feature-text">you pay only after you see and approve your website.</span>
+            </div>
+          </div>
+        </section>
+        <section class="call-section">
+          <h2 class="call-title">Answer 3 quick questions about your business.</h2>
+          <p class="call-text">We'll prepare a website design plan and a clear price for you.</p>
+          <p class="call-payment-note">If you like the plan, we build the site — you only pay after you approve it.</p>
+          <button type="button" class="cta-button" id="openModalBtn">Get my website plan & price</button>
+          <div class="cta-note">Free 30-min call • No obligation • Pay only after approval</div>
+        </section>
+      </main>
+      <footer>
+        <div>© 2025 Kove Media</div>
+        <div>Websites & simple ads for small local businesses</div>
+      </footer>
+    </div>
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-content">
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+        <h2 class="modal-title">Get Your Free Website Design Proposal</h2>
+        <p class="modal-subtitle">Answer 3 questions so we can prepare the right mockup for you.</p>
+        <form id="proposalForm">
+          <div class="form-group">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" id="fullName" name="fullName" class="form-input" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">Email *</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="mobilePhone" class="form-label">Mobile Phone</label>
+            <label class="form-label-small">Mobile Phone (for verification)</label>
+            <input type="tel" id="mobilePhone" name="mobilePhone" class="form-input" placeholder="(201) 555-0123" required />
+            <div class="form-warning">⚠️ We will text or call you once to verify your request.</div>
+          </div>
+          <div class="form-group">
+            <label for="industry" class="form-label">Industry</label>
+            <select id="industry" name="industry" class="form-select" required>
+              <option value="">Select your industry</option>
+              <option value="Roofing">Roofing</option>
+              <option value="Cleaning">Cleaning</option>
+              <option value="Construction">Construction</option>
+              <option value="Landscaping">Landscaping</option>
+              <option value="Beauty/Spa">Beauty/Spa</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Do you have a current website?</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="websiteYes" name="hasWebsite" value="Yes, I want a redesign" required />
+                <label for="websiteYes">Yes, I want a redesign</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="websiteNo" name="hasWebsite" value="No, I need a new one" required />
+                <label for="websiteNo">No, I need a new one</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">When do you need this done?</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="timelineASAP" name="timeline" value="ASAP (Ready to start)" required />
+                <label for="timelineASAP">ASAP (Ready to start)</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="timeline1-2weeks" name="timeline" value="In 1–2 weeks" required />
+                <label for="timeline1-2weeks">In 1–2 weeks</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="timelineBrowsing" name="timeline" value="Just browsing" required />
+                <label for="timelineBrowsing">Just browsing</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="form-button">Check Availability & Price</button>
+        </form>
       </div>
-      <div class="header-tagline">Websites & ads for local US businesses</div>
-    </header>
-    <main>
-      <section class="hero">
-        <h1 class="hero-title">
-          Website for your local business in 3–5 days
-        </h1>
-        <p class="hero-subtitle">
-          We build fast websites for cleaners, contractors, beauty and other local services in the US — tailored to your business.
-        </p>
-        <div class="hero-features">
-          <div class="hero-feature">
-            <span class="hero-feature-label">Price:</span>
-            <span class="hero-feature-text">most websites are $200–$500 one-time, no monthly "website subscription" fees.</span>
-          </div>
-          <div class="hero-feature">
-            <span class="hero-feature-label">Timeline:</span>
-            <span class="hero-feature-text">your website is usually ready in 3–5 days.</span>
-          </div>
-          <div class="hero-feature">
-            <span class="hero-feature-label">Payment:</span>
-            <span class="hero-feature-text">you pay only after you see and approve your website.</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="call-section">
-        <h2 class="call-title">Answer 3 quick questions about your business.</h2>
-        <p class="call-text">
-          We'll prepare a website design plan and a clear price for you.
-        </p>
-        <p class="call-payment-note">
-          If you like the plan, we build the site — you only pay after you approve it.
-        </p>
-        <button type="button" class="cta-button" id="openModalBtn">
-          Get my website plan & price
-        </button>
-        <div class="cta-note">
-          • No obligation • Pay only after approval
-        </div>
-      </section>
-    </main>
-    <footer>
-      <div>© 2025 Kove Media</div>
-      <div>Websites & ads for small local businesses</div>
-    </footer>
-  </div>
-
-  <!-- Form Modal Popup -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
-      <button class="modal-close" id="closeModalBtn">&times;</button>
-      <h2 class="modal-title">Get Your Free Website Design Proposal</h2>
-      <p class="modal-subtitle">Answer 3 questions so we can prepare the right mockup for you.</p>
-      
-      <form id="proposalForm">
-        <div class="form-group">
-          <label for="fullName" class="form-label">Full Name</label>
-          <input 
-            type="text" 
-            id="fullName" 
-            name="fullName" 
-            class="form-input" 
-            placeholder="Your full name"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="email" class="form-label">Email *</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            class="form-input" 
-            placeholder="your.email@example.com"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="mobilePhone" class="form-label">Mobile Phone</label>
-          <label class="form-label-small">Mobile Phone (for verification)</label>
-          <input 
-            type="tel" 
-            id="mobilePhone" 
-            name="mobilePhone" 
-            class="form-input" 
-            placeholder="(201) 555-0123"
-            required
-          />
-          <div class="form-warning">
-            ⚠️ We will text or call you once to verify your request.
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="industry" class="form-label">Industry</label>
-          <select id="industry" name="industry" class="form-select" required>
-            <option value="">Select your industry</option>
-            <option value="Roofing">Roofing</option>
-            <option value="Cleaning">Cleaning</option>
-            <option value="Construction">Construction</option>
-            <option value="Landscaping">Landscaping</option>
-            <option value="Beauty/Spa">Beauty/Spa</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Do you have a current website?</label>
-          <div class="radio-group">
-            <div class="radio-option">
-              <input type="radio" id="websiteYes" name="hasWebsite" value="Yes, I want a redesign" required />
-              <label for="websiteYes">Yes, I want a redesign</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" id="websiteNo" name="hasWebsite" value="No, I need a new one" required />
-              <label for="websiteNo">No, I need a new one</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">When do you need this done?</label>
-          <div class="radio-group">
-            <div class="radio-option">
-              <input type="radio" id="timelineASAP" name="timeline" value="ASAP (Ready to start)" required />
-              <label for="timelineASAP">ASAP (Ready to start)</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" id="timeline1-2weeks" name="timeline" value="In 1–2 weeks" required />
-              <label for="timeline1-2weeks">In 1–2 weeks</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" id="timelineBrowsing" name="timeline" value="Just browsing" required />
-              <label for="timelineBrowsing">Just browsing</label>
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" class="form-button">
-          Check Availability & Price
-        </button>
-      </form>
     </div>
-  </div>
-
-  <!-- Success Modal Popup -->
-  <div class="modal-overlay" id="successModalOverlay">
-    <div class="success-modal-content">
-      <h2 class="success-modal-title">✅ Application received</h2>
-      <p class="success-modal-text">
-        Thanks, we've got your details. Next step: book a quick 10‑minute call so we can plan your website together and start your 24‑Hour Express Start. This is a short planning call, not a sales pitch.
-      </p>
-      <a href="thank-you.html" class="success-modal-button">
-        Continue to book my 10‑minute call
-      </a>
+    <div class="modal-overlay" id="successModalOverlay">
+      <div class="success-modal-content">
+        <h2 class="success-modal-title">✅ Application received</h2>
+        <p class="success-modal-text">
+          Thanks, we've got your details. Next step: book a quick 10‑minute call so we can plan your website together and start your 24‑Hour Express Start. This is a short planning call, not a sales pitch.
+        </p>
+        <a href="thank-you.html" class="success-modal-button">Continue to book my 10‑minute call</a>
+      </div>
     </div>
-  </div>
+  `;
 
-  <script>
-    // Modal functionality
-    const modalOverlay = document.getElementById('modalOverlay');
-    const successModalOverlay = document.getElementById('successModalOverlay');
-    const openModalBtn = document.getElementById('openModalBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const proposalForm = document.getElementById('proposalForm');
+  return (
+    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+  );
+}
 
-    // Open form modal
-    openModalBtn.addEventListener('click', () => {
-      modalOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    });
-
-    // Close form modal
-    closeModalBtn.addEventListener('click', () => {
-      modalOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-
-    // Close modal when clicking outside
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
-        modalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
-
-    // Close success modal when clicking outside
-    successModalOverlay.addEventListener('click', (e) => {
-      if (e.target === successModalOverlay) {
-        successModalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (modalOverlay.classList.contains('active')) {
-          modalOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-        if (successModalOverlay.classList.contains('active')) {
-          successModalOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      }
-    });
-
-    // Form submission
-    proposalForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // Get form data
-      const formData = {
-        fullName: document.getElementById('fullName').value,
-        email: document.getElementById('email').value,
-        mobilePhone: document.getElementById('mobilePhone').value,
-        industry: document.getElementById('industry').value,
-        hasWebsite: document.querySelector('input[name="hasWebsite"]:checked').value,
-        timeline: document.querySelector('input[name="timeline"]:checked').value,
-        calendarLink: window.location.origin + window.location.pathname.replace('index.html', 'thank-you.html')
-      };
-      
-      // Track form submission in Meta Pixel
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead');
-      }
-      
-      // Send data to Vercel API
-      try {
-        console.log('Sending form data:', formData);
-        
-        // Используем API endpoint Vercel (пробуем разные варианты)
-        let apiUrl = '/api/send-email';
-        
-        // Если относительный путь не работает, пробуем абсолютный
-        if (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('localhost')) {
-          apiUrl = window.location.origin + '/api/send-email';
-        }
-        
-        console.log('API URL:', apiUrl);
-        
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
-        });
-        
-        console.log('Response status:', response.status);
-        console.log('Response URL:', response.url);
-        
-        if (!response.ok) {
-          // Пробуем получить текст ошибки
-          const errorText = await response.text();
-          console.error('Error response:', errorText);
-          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-        }
-        
-        const result = await response.json();
-        console.log('Response result:', result);
-        
-        if (!result.success) {
-          console.error('Email sending error:', result.message);
-          alert('Ошибка отправки: ' + result.message + '\n\nПроверьте консоль (F12) для деталей.');
-        } else {
-          console.log('✅ Email sent successfully!');
-        }
-      } catch (error) {
-        console.error('Request error:', error);
-        console.error('Full error:', error.stack);
-        
-        // Более информативное сообщение
-        let errorMsg = 'Ошибка при отправке формы: ' + error.message;
-        errorMsg += '\n\nПроверьте:\n';
-        errorMsg += '1. Файл api/send-email.js загружен на GitHub\n';
-        errorMsg += '2. Vercel пересобрал проект после загрузки\n';
-        errorMsg += '3. В Vercel Dashboard → Deployments → Functions есть api/send-email\n';
-        errorMsg += '4. Переменные окружения EMAIL_USER и EMAIL_PASS установлены\n';
-        errorMsg += '5. Откройте консоль (F12) для деталей';
-        
-        alert(errorMsg);
-        // Continue anyway - form is submitted
-      }
-      
-      // Hide form modal
-      modalOverlay.classList.remove('active');
-      
-      // Show success modal
-      successModalOverlay.classList.add('active');
-    });
-  </script>
-</body>
-</html>
+  return (
+    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+  );
+}
