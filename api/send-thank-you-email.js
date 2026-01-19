@@ -23,22 +23,51 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Используем более простой подход - FormSubmit уже отправляет базовый автоответ
-    // Здесь мы можем добавить дополнительную логику если нужно
-    // Для красивого HTML письма лучше использовать Resend API или другой сервис
+    // Используем Resend API для отправки красивого HTML письма
+    const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_WBJZjiDR_FvmHBTW2iMGvuUgszzcfXc5j';
     
-    // Пока просто возвращаем успех - FormSubmit отправит автоответ автоматически
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${RESEND_API_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Kove Media <onboarding@resend.dev>',
+        to: email,
+        replyTo: 'max@kove.one',
+        subject: 'Thank You - Kove Media',
+        html: getThankYouEmailHTML(name, industry),
+        text: getThankYouEmailText(name, industry)
+      })
+    });
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      console.error('Resend API error:', responseData);
+      // Fallback: FormSubmit уже отправит базовый автоответ
+      return res.status(200).json({ 
+        success: true, 
+        note: 'Basic autoresponse sent via FormSubmit',
+        error: responseData
+      });
+    }
+
     return res.status(200).json({ 
       success: true,
-      message: 'Thank you email will be sent via FormSubmit autoresponse'
+      message: 'Thank you email sent successfully via Resend',
+      emailId: responseData.id
     });
 
   } catch (error) {
     console.error('Email sending error:', error);
     // Не возвращаем ошибку, чтобы не блокировать форму
+    // FormSubmit все равно отправит базовый автоответ
     return res.status(200).json({ 
       success: true, 
-      note: 'Basic autoresponse will be sent via FormSubmit' 
+      note: 'Basic autoresponse will be sent via FormSubmit',
+      error: error.message
     });
   }
 }
