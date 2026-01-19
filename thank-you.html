@@ -59,7 +59,7 @@
   <nav class="fixed w-full z-50 bg-black/95 backdrop-blur-md shadow-lg border-b border-gray-800 py-2">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <div class="flex items-center group cursor-pointer">
+        <a href="/" class="flex items-center group cursor-pointer">
           <svg class="h-10 w-auto" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
             <g>
               <rect x="3" y="2" width="9" height="26" fill="#ffffff"/>
@@ -69,7 +69,14 @@
             <text x="38" y="19" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="bold" fill="#ffffff">OVE</text>
             <text x="38" y="37" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#ffffff">MEDIA</text>
           </svg>
-        </div>
+        </a>
+        <a href="/" class="text-gray-300 hover:text-white text-sm font-medium transition-colors flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Back to Home
+        </a>
       </div>
     </div>
   </nav>
@@ -212,6 +219,18 @@
 
     </div>
   </main>
+  
+  <!-- Back to Home Button Section -->
+  <section class="py-12 bg-black border-t border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <a href="/" class="inline-flex items-center gap-3 text-gray-300 hover:text-white transition-colors group">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span class="font-medium text-lg">Return to Homepage</span>
+      </a>
+    </div>
+  </section>
   
   <!-- Footer -->
   <footer class="bg-black text-gray-500 py-10 border-t border-gray-900">
