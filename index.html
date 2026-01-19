@@ -783,11 +783,7 @@
     const successModalOverlay = document.getElementById('successModalOverlay');
 
     proposalForm.addEventListener('submit', async (e) => {
-      // Track form submission in Meta Pixel before form submits
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead');
-      }
-      
+      // Don't track Lead here - it will be tracked on thank-you page
       // Get form data
       const formData = new FormData(proposalForm);
       const formObject = {};
