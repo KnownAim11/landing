@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
   <link rel="dns-prefetch" href="https://images.unsplash.com" />
   <!-- Preload critical images -->
-  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1574757987642-5755f083910d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=85" fetchpriority="high" />
-  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=85" fetchpriority="high" />
+  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=85" fetchpriority="high" />
+  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=448&q=85" fetchpriority="high" />
   <!-- Meta Pixel Code -->
   <script>
   !function(f,b,e,v,n,t,s)
@@ -192,16 +192,19 @@
     img {
       image-rendering: -webkit-optimize-contrast;
       image-rendering: crisp-edges;
+      max-width: 100%;
+      height: auto;
+      transition: opacity 0.3s ease-in-out;
     }
     img[loading="lazy"] {
       content-visibility: auto;
     }
-    /* Smooth image loading */
-    img {
-      transition: opacity 0.3s ease-in-out;
-    }
     img:not([src=""]) {
       opacity: 1;
+    }
+    /* Prevent layout shift */
+    img[width][height] {
+      aspect-ratio: attr(width) / attr(height);
     }
   </style>
 </head>
@@ -256,7 +259,7 @@
   <!-- Hero Section -->
   <section class="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
     <div class="absolute inset-0 z-0">
-      <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=85" alt="Construction Site Background" class="w-full h-full object-cover" loading="eager" fetchpriority="high" />
+      <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=85" alt="Construction Site Background" width="1920" height="1080" class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async" />
       <div class="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/60"></div>
       <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
     </div>
@@ -297,7 +300,7 @@
           <div class="absolute left-0 lg:-left-4 top-20 w-40 md:w-52 bg-[#1A1A1A] rounded-[2rem] border-[8px] border-[#2a2a2a] shadow-2xl transform -rotate-12 translate-z-0 scale-90 z-10 transition-transform hover:-translate-y-2 duration-500">
             <div class="h-full bg-[#FAFAFA] rounded-[1.4rem] overflow-hidden flex flex-col relative">
               <div class="h-full w-full relative">
-                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" width="400" height="300" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Map" loading="lazy" />
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=450&q=85" width="400" height="300" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Map" loading="lazy" decoding="async" />
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full p-2 shadow-xl animate-bounce">
                   <div class="w-2 h-2 bg-white rounded-full"></div>
                 </div>
@@ -344,7 +347,7 @@
             <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-[#000] rounded-b-xl z-30"></div>
             <div class="h-full bg-white rounded-[2rem] overflow-hidden flex flex-col relative">
               <div class="h-44 relative flex items-center justify-center overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=85" width="600" height="400" alt="Roof" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=85" width="600" height="400" alt="Roof" class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
                 <div class="text-center relative z-10">
                   <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase mb-1 inline-block">Best in Town</span>
@@ -353,7 +356,7 @@
               </div>
               <div class="p-5 bg-[#FAFAFA] flex-1 flex flex-col gap-3">
                 <div class="flex items-center gap-2">
-                  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=128&h=128&q=85" width="32" height="32" class="w-8 h-8 rounded-full object-cover" alt="Agent" loading="lazy" />
+                  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=128&h=128&q=85" width="32" height="32" class="w-8 h-8 rounded-full object-cover" alt="Agent" loading="lazy" decoding="async" />
                   <div class="text-[10px] text-gray-500 leading-tight">
                     <span class="block font-bold text-gray-800">Mike's Roofing</span>
                     Ready to help!
@@ -383,7 +386,7 @@
       <div class="grid md:grid-cols-3 gap-8 md:gap-12">
         <div class="group p-6 bg-[#FAFAFA] border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-left">
           <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=85" width="600" height="200" alt="Invisible on Maps" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=85" width="600" height="200" alt="Invisible on Maps" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent"></div>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
@@ -395,8 +398,8 @@
         </div>
 
         <div class="group p-6 bg-[#FAFAFA] border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-left">
-          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1574757987642-5755f083910d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=85" alt="No Trust Factor" width="600" height="200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="eager" fetchpriority="high" />
+          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative bg-gray-200">
+            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=85" alt="No Trust Factor" width="600" height="200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="eager" fetchpriority="high" decoding="async" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent"></div>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
@@ -409,7 +412,7 @@
 
         <div class="group p-6 bg-[#FAFAFA] border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-left">
           <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=85" width="600" height="200" alt="Hard to Contact" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=85" width="600" height="200" alt="Hard to Contact" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent"></div>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
@@ -425,7 +428,7 @@
         <div class="absolute -inset-1 bg-gray-200 rounded-lg blur-sm transform rotate-1"></div>
         <div class="relative bg-[#1A1A1A] text-white px-8 py-4 rounded-lg transform rotate-1 hover:rotate-0 transition-transform cursor-default shadow-2xl border border-gray-700 flex items-center gap-4">
           <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-red-600">
-            <img src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200&q=85" width="48" height="48" class="w-full h-full object-cover" alt="Contractor" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200&q=85" width="48" height="48" class="w-full h-full object-cover" alt="Contractor" loading="lazy" decoding="async" />
           </div>
           <div>
             <p class="font-bold text-lg md:text-xl tracking-wide italic">
@@ -448,7 +451,7 @@
         <div class="bg-[#FAFAFA] rounded-2xl overflow-hidden shadow-lg border border-gray-200/50 group hover:shadow-2xl transition-all duration-300">
           <div class="h-56 bg-gray-800 relative overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1632759145351-1d592919f522?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=85" width="800" height="448" alt="Apex Roofing" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1632759145351-1d592919f522?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=448&q=85" width="800" height="448" alt="Apex Roofing" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="lazy" decoding="async" />
             <div class="absolute bottom-4 left-4 z-20">
               <h3 class="text-white font-bold text-2xl tracking-tighter">Apex Roofing</h3>
               <span class="text-red-400 text-xs font-bold uppercase tracking-wider">Lead Gen Site</span>
@@ -465,7 +468,7 @@
         <div class="bg-[#FAFAFA] rounded-2xl overflow-hidden shadow-lg border border-gray-200/50 group hover:shadow-2xl transition-all duration-300">
           <div class="h-56 bg-gray-800 relative overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=85" alt="City HVAC" width="800" height="448" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="eager" fetchpriority="high" />
+            <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=448&q=85" alt="City HVAC" width="800" height="448" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="eager" fetchpriority="high" decoding="async" />
             <div class="absolute bottom-4 left-4 z-20">
               <h3 class="text-white font-bold text-2xl tracking-tighter">City HVAC</h3>
               <span class="text-blue-400 text-xs font-bold uppercase tracking-wider">Local SEO</span>
@@ -482,7 +485,7 @@
         <div class="bg-[#FAFAFA] rounded-2xl overflow-hidden shadow-lg border border-gray-200/50 group hover:shadow-2xl transition-all duration-300">
           <div class="h-56 bg-gray-800 relative overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=85" width="800" height="448" alt="Elite Remodel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=448&q=85" width="800" height="448" alt="Elite Remodel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="lazy" decoding="async" />
             <div class="absolute bottom-4 left-4 z-20">
               <h3 class="text-white font-bold text-2xl tracking-tighter">Elite Remodel</h3>
               <span class="text-yellow-400 text-xs font-bold uppercase tracking-wider">Showcase Site</span>
@@ -555,42 +558,42 @@
       <h2 class="text-3xl md:text-4xl font-black mb-16 tracking-tight text-gray-900">We build websites for</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-          <img src="https://images.unsplash.com/photo-1632759145351-1d592919f522?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" width="400" height="300" alt="Roofing" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1632759145351-1d592919f522?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=85" width="400" height="300" alt="Roofing" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <span class="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">Roofing</span>
           </div>
         </div>
-        <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-          <img src="https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" alt="HVAC" width="400" height="300" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="eager" />
+        <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-200">
+          <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=85" alt="HVAC" width="400" height="300" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <span class="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">HVAC</span>
           </div>
         </div>
         <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" width="400" height="300" alt="General" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=85" width="400" height="300" alt="General" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <span class="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">General</span>
           </div>
         </div>
         <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-          <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" width="400" height="300" alt="Painters" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=85" width="400" height="300" alt="Painters" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <span class="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">Painters</span>
           </div>
         </div>
         <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-          <img src="https://images.unsplash.com/photo-1557429287-b2e26467fc2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" width="400" height="300" alt="Landscape" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1557429287-b2e26467fc2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=85" width="400" height="300" alt="Landscape" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <span class="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">Landscape</span>
           </div>
         </div>
         <div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-          <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=85" width="400" height="300" alt="Electric" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=85" width="400" height="300" alt="Electric" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" />
           <div class="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <span class="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">Electric</span>
@@ -802,6 +805,38 @@
         }
       }
     });
+
+    // Image loading optimization
+    if ('loading' in HTMLImageElement.prototype) {
+      // Native lazy loading is supported
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      images.forEach(img => {
+        if (img.complete && img.naturalHeight !== 0) {
+          img.style.opacity = '1';
+        } else {
+          img.addEventListener('load', function() {
+            this.style.opacity = '1';
+          });
+        }
+      });
+    }
+
+    // Handle image loading errors gracefully
+    document.addEventListener('error', function(e) {
+      if (e.target.tagName === 'IMG') {
+        const img = e.target;
+        // Only set fallback if not already a fallback
+        if (!img.dataset.fallbackUsed) {
+          img.dataset.fallbackUsed = 'true';
+          // Use a placeholder or retry with different parameters
+          const currentSrc = img.src;
+          if (currentSrc.includes('unsplash.com')) {
+            // Try with lower quality or different image
+            img.src = currentSrc.replace(/q=\d+/, 'q=75').replace(/w=\d+/, 'w=400');
+          }
+        }
+      }
+    }, true);
   </script>
 </body>
 </html>
