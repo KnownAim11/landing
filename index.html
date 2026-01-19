@@ -630,8 +630,7 @@
             <!-- FormSubmit.co hidden fields -->
             <input type="hidden" name="_subject" value="NEW LEAD: Contractor Website Request">
             <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://your-domain.com/thank-you.html">
-            <!-- Note: Replace 'your-domain.com' with your actual domain after deployment -->
+            <input type="hidden" name="_next" value="https://kove.services/thank-you.html">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_autoresponse" value="Thank you for your interest! We've received your request and will contact you within 24 hours to discuss your website project.">
             
@@ -788,7 +787,13 @@
       }
       
       // FormSubmit.co will handle the submission and redirect
-      // No need to prevent default - let FormSubmit handle it
+      // Set a fallback redirect in case FormSubmit doesn't redirect
+      setTimeout(() => {
+        // Only redirect if still on the same page (FormSubmit didn't redirect)
+        if (window.location.href.includes('index.html') || window.location.pathname === '/') {
+          window.location.href = 'https://kove.services/thank-you.html';
+        }
+      }, 2000);
     });
 
     // Close success modal
