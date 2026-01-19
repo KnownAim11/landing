@@ -632,7 +632,8 @@
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://kove.services/thank-you.html">
             <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_autoresponse" value="Thank you for your interest! We've received your request and will contact you within 24 hours to discuss your website project.">
+            <input type="hidden" name="_autoresponse" value="Thank you for your interest! We've received your request and will contact you within 24 hours to discuss your website project. Your website package: $497 one-time • Ready in 3 business days. We're excited to help you get more leads!">
+            <input type="hidden" name="_autoresponse_subject" value="Thank You - Kove Media">
             
             <div>
               <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Your Name</label>
@@ -776,15 +777,40 @@
       document.getElementById('contact-form').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Form submission - Track Meta Pixel before FormSubmit redirects
+    // Form submission - Track Meta Pixel and send thank you email
     const proposalForm = document.getElementById('proposalForm');
     const successModalOverlay = document.getElementById('successModalOverlay');
 
-    proposalForm.addEventListener('submit', (e) => {
+    proposalForm.addEventListener('submit', async (e) => {
       // Track form submission in Meta Pixel before form submits
       if (typeof fbq !== 'undefined') {
         fbq('track', 'Lead');
       }
+      
+      // Get form data
+      const formData = new FormData(proposalForm);
+      const formObject = {};
+      formData.forEach((value, key) => {
+        formObject[key] = value;
+      });
+      
+      // Send thank you email to the lead via our API
+      // This will send a beautiful HTML email
+      fetch('https://kove.services/api/send-thank-you-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formObject.name,
+          email: formObject.email,
+          phone: formObject.phone,
+          industry: formObject.industry
+        })
+      }).catch(error => {
+        console.error('Failed to send thank you email:', error);
+        // Continue anyway - FormSubmit will still send basic autoresponse
+      });
       
       // FormSubmit.co will handle the submission and redirect
       // Set a fallback redirect in case FormSubmit doesn't redirect
