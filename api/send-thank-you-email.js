@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const nodemailer = require('nodemailer');
+
+module.exports = async function handler(req, res) {
   // Разрешаем CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -23,83 +25,56 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Используем Resend API для отправки красивого HTML письма
-    const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_WBJZjiDR_FvmHBTW2iMGvuUgszzcfXc5j';
+    // Настройка SMTP транспорта для Gmail
+    // Используем переменные окружения для безопасности
+    const EMAIL_USER = process.env.EMAIL_USER || 'max@kove.one';
+    const EMAIL_PASS = process.env.EMAIL_PASS; // Пароль приложения Gmail
     
-    console.log('Attempting to send email to:', email);
-    console.log('Using Resend API key:', RESEND_API_KEY ? 'Present' : 'Missing');
-    
-    const emailHTML = getThankYouEmailHTML(name, industry);
-    const emailText = getThankYouEmailText(name, industry);
-    
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${RESEND_API_KEY}`
-      },
-      body: JSON.stringify({
-        from: 'Kove Media <onboarding@resend.dev>',
-        to: email,
-        replyTo: 'max@kove.one',
-        subject: 'Thank You - Kove Media',
-        html: emailHTML,
-        text: emailText
-      })
-    });
-
-    const responseData = await response.json();
-    console.log('Resend API response:', responseData);
-
-    if (!response.ok) {
-      console.error('Resend API error:', responseData);
-      // Fallback: попробуем отправить через FormSubmit напрямую
-      try {
-        const formData = new URLSearchParams();
-        formData.append('_to', email);
-        formData.append('_subject', 'Thank You - Kove Media');
-        formData.append('_autoresponse', emailText);
-        
-        const formSubmitResponse = await fetch('https://formsubmit.co/ajax/max@kove.one', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: formData.toString()
-        });
-        
-        if (formSubmitResponse.ok) {
-          return res.status(200).json({ 
-            success: true, 
-            note: 'Email sent via FormSubmit fallback',
-            resendError: responseData
-          });
-        }
-      } catch (fallbackError) {
-        console.error('FormSubmit fallback also failed:', fallbackError);
-      }
-      
-      return res.status(200).json({ 
+    if (!EMAIL_PASS) {
+      console.error('EMAIL_PASS environment variable is not set');
+      return res.status(500).json({ 
         success: false, 
-        note: 'Email sending failed, but FormSubmit will send basic autoresponse',
-        error: responseData
+        message: 'Email service not configured. Please set EMAIL_PASS environment variable.' 
       });
     }
 
+    // Создаем транспортер для Gmail
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // true для порта 465
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS, // Пароль приложения Gmail (App Password)
+      },
+    });
+
+    // Отправляем письмо лиду
+    const mailOptions = {
+      from: `"Kove Media" <${EMAIL_USER}>`,
+      to: email,
+      replyTo: EMAIL_USER,
+      subject: 'Thank You - Kove Media',
+      html: getThankYouEmailHTML(name, industry),
+      text: getThankYouEmailText(name, industry)
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    
+    console.log('Thank you email sent successfully:', info.messageId);
+
     return res.status(200).json({ 
       success: true,
-      message: 'Thank you email sent successfully via Resend',
-      emailId: responseData.id
+      message: 'Thank you email sent successfully',
+      messageId: info.messageId
     });
 
   } catch (error) {
     console.error('Email sending error:', error);
-    // Не возвращаем ошибку, чтобы не блокировать форму
-    // FormSubmit все равно отправит базовый автоответ
-    return res.status(200).json({ 
-      success: true, 
-      note: 'Basic autoresponse will be sent via FormSubmit',
-      error: error.message
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send email',
+      error: error.message 
     });
   }
 }

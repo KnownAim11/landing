@@ -4,6 +4,9 @@
   "description": "Professional websites for US contractors - Kove Media",
   "scripts": {
     "build": "echo 'Static site - no build needed'"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.7"
   }
 }
 
