@@ -372,13 +372,13 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-10">
               {[
                 { title: "Apex Roofing", tag: "Lead Gen Site", tagColor: "red", tagClass: "text-red-400", desc: "Focus on storm damage repairs. Fast mobile loading for emergency calls.", result: "+40% Quote Requests", resultClass: "bg-green-50 text-green-700 border-green-100", img: "https://images.unsplash.com/photo-1632759145351-1d592919f522?auto=format&fit=crop&q=80" },
-                { title: "City HVAC", tag: "Local SEO", tagColor: "blue", tagClass: "text-blue-400", desc: "SEO-optimized pages for surrounding cities to capture more territory.", result: "Dominating Local Maps", resultClass: "bg-gray-50 text-gray-700 border-gray-200", img: "https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?auto=format&fit=crop&q=80" },
+                { title: "City HVAC", tag: "Local SEO", tagColor: "blue", tagClass: "text-blue-400", desc: "SEO-optimized pages for surrounding cities to capture more territory.", result: "Dominating Local Maps", resultClass: "bg-gray-50 text-gray-700 border-gray-200", img: "https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?auto=format&fit=crop&w=1200&q=80" },
                 { title: "Elite Remodel", tag: "Showcase Site", tagColor: "yellow", tagClass: "text-yellow-400", desc: "Gallery-focused design to sell luxury renovations ($50k+ jobs).", result: "Sold 3 Kitchens in Month 1", resultClass: "bg-red-50 text-red-700 border-red-100", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80" }
               ].map((item, idx) => (
                 <div key={idx} className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 group hover:shadow-2xl transition-all duration-300">
                   <div className="h-56 bg-gray-800 relative overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                    <img src={item.img} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                    <img src={item.img} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500" loading="lazy" />
                     <div className="absolute bottom-4 left-4 z-20">
                       <h3 className="text-white font-bold text-2xl tracking-tighter">{item.title}</h3>
                       <span className={`${item.tagClass} text-xs font-bold uppercase tracking-wider`}>{item.tag}</span>
@@ -430,15 +430,15 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-black mb-16 tracking-tight text-gray-900">We build websites for</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { img: "https://images.unsplash.com/photo-1632759145351-1d592919f522?auto=format&fit=crop&q=80", label: "Roofing" },
-                { img: "https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?auto=format&fit=crop&q=80", label: "HVAC" },
-                { img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80", label: "General" },
-                { img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80", label: "Painters" },
-                { img: "https://images.unsplash.com/photo-1557429287-b2e26467fc2b?auto=format&fit=crop&q=80", label: "Landscape" },
-                { img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80", label: "Electric" },
+                { img: "https://images.unsplash.com/photo-1632759145351-1d592919f522?auto=format&fit=crop&w=600&q=80", label: "Roofing" },
+                { img: "https://images.unsplash.com/photo-1581094794329-cd136ce4dad5?auto=format&fit=crop&w=600&q=80", label: "HVAC" },
+                { img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80", label: "General" },
+                { img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80", label: "Painters" },
+                { img: "https://images.unsplash.com/photo-1557429287-b2e26467fc2b?auto=format&fit=crop&w=600&q=80", label: "Landscape" },
+                { img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80", label: "Electric" },
               ].map((item, idx) => (
                 <div key={idx} className="relative h-40 rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
-                  <img src={item.img} alt={item.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={item.img} alt={item.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-black/50 group-hover:bg-red-900/60 transition-colors duration-300"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="font-bold text-white text-lg tracking-wide uppercase border-b-2 border-transparent group-hover:border-white transition-all">{item.label}</span>
