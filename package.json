@@ -3,20 +3,7 @@
   "version": "1.0.0",
   "description": "Professional websites for US contractors - Kove Media",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "next": "^14.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "nodemailer": "^6.9.7"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.3.0",
-    "postcss": "^8.4.0",
-    "autoprefixer": "^10.4.0"
+    "build": "echo 'Static site - no build needed'"
   }
 }
 
