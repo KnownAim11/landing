@@ -634,6 +634,7 @@
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_autoresponse" value="Thank you for your interest! We've received your request and will contact you within 24 hours to discuss your website project. Your website package: $497 one-time • Ready in 3 business days. We're excited to help you get more leads!">
             <input type="hidden" name="_autoresponse_subject" value="Thank You - Kove Media">
+            <input type="hidden" name="_autoresponse_html" value="true">
             
             <div>
               <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Your Name</label>
@@ -807,8 +808,18 @@
           phone: formObject.phone,
           industry: formObject.industry
         })
-      }).catch(error => {
-        console.error('Failed to send thank you email:', error);
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Thank you email API response:', data);
+        if (data.success) {
+          console.log('✅ Thank you email sent successfully');
+        } else {
+          console.warn('⚠️ Thank you email may not have been sent:', data);
+        }
+      })
+      .catch(error => {
+        console.error('❌ Failed to send thank you email:', error);
         // Continue anyway - FormSubmit will still send basic autoresponse
       });
       

@@ -26,6 +26,12 @@ export default async function handler(req, res) {
     // Используем Resend API для отправки красивого HTML письма
     const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_WBJZjiDR_FvmHBTW2iMGvuUgszzcfXc5j';
     
+    console.log('Attempting to send email to:', email);
+    console.log('Using Resend API key:', RESEND_API_KEY ? 'Present' : 'Missing');
+    
+    const emailHTML = getThankYouEmailHTML(name, industry);
+    const emailText = getThankYouEmailText(name, industry);
+    
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -37,19 +43,45 @@ export default async function handler(req, res) {
         to: email,
         replyTo: 'max@kove.one',
         subject: 'Thank You - Kove Media',
-        html: getThankYouEmailHTML(name, industry),
-        text: getThankYouEmailText(name, industry)
+        html: emailHTML,
+        text: emailText
       })
     });
 
     const responseData = await response.json();
+    console.log('Resend API response:', responseData);
 
     if (!response.ok) {
       console.error('Resend API error:', responseData);
-      // Fallback: FormSubmit уже отправит базовый автоответ
+      // Fallback: попробуем отправить через FormSubmit напрямую
+      try {
+        const formData = new URLSearchParams();
+        formData.append('_to', email);
+        formData.append('_subject', 'Thank You - Kove Media');
+        formData.append('_autoresponse', emailText);
+        
+        const formSubmitResponse = await fetch('https://formsubmit.co/ajax/max@kove.one', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: formData.toString()
+        });
+        
+        if (formSubmitResponse.ok) {
+          return res.status(200).json({ 
+            success: true, 
+            note: 'Email sent via FormSubmit fallback',
+            resendError: responseData
+          });
+        }
+      } catch (fallbackError) {
+        console.error('FormSubmit fallback also failed:', fallbackError);
+      }
+      
       return res.status(200).json({ 
-        success: true, 
-        note: 'Basic autoresponse sent via FormSubmit',
+        success: false, 
+        note: 'Email sending failed, but FormSubmit will send basic autoresponse',
         error: responseData
       });
     }
