@@ -311,7 +311,7 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-5xl font-black mb-16 text-gray-900 tracking-tight">
               Why you are losing jobs to <br/>
-              <span className="text-red-700">"The Other Guys"</span>
+              <span className="text-red-700">"To your competitors"</span>
             </h2>
             
             <div className="grid md:grid-cols-3 gap-8 md:gap-12">
@@ -427,7 +427,7 @@ export default function Home() {
         {/* Specialties Section */}
         <section className="py-24 bg-[#F9F9F7]">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-black mb-16 tracking-tight text-gray-900">We Specialize In:</h2>
+            <h2 className="text-3xl md:text-4xl font-black mb-16 tracking-tight text-gray-900">We build websites for</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
                 { img: "https://images.unsplash.com/photo-1632759145351-1d592919f522?auto=format&fit=crop&q=80", label: "Roofing" },
