@@ -198,6 +198,133 @@
     img[width][height] {
       aspect-ratio: attr(width) / attr(height);
     }
+    /* Reserve space for images to prevent CLS */
+    img {
+      display: block;
+    }
+    img[loading="lazy"] {
+      min-height: 1px;
+    }
+    /* Reserve space for hero image */
+    .hero-image-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      overflow: hidden;
+    }
+    .hero-image-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Reserve space for phone mockups */
+    .phone-mockup-container {
+      min-height: 450px;
+    }
+    @media (min-width: 768px) {
+      .phone-mockup-container {
+        min-height: 600px;
+      }
+    }
+    /* Reserve space for mobile menu */
+    #mobileMenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    #mobileMenu:not(.hidden) {
+      max-height: 500px;
+    }
+    /* Prevent CLS from Meta Pixel */
+    .fb-pixel {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+    }
+    /* Reserve space for navbar to prevent shift */
+    nav {
+      min-height: 80px;
+    }
+    /* Reserve space for form inputs */
+    input, select, textarea {
+      min-height: 56px;
+    }
+    /* Prevent shift from Tailwind loading */
+    body {
+      visibility: hidden;
+    }
+    body.loaded {
+      visibility: visible;
+    }
+    /* Reserve space for cards in pain points section */
+    #pain .group {
+      min-height: 280px;
+    }
+    /* Reserve space for portfolio cards */
+    #portfolio > div > div {
+      min-height: 400px;
+    }
+    /* Reserve space for specialties cards */
+    #specialties-section .relative {
+      min-height: 160px;
+    }
+    @media (min-width: 768px) {
+      #specialties-section .relative {
+        min-height: 192px;
+      }
+    }
+    @media (min-width: 1024px) {
+      #specialties-section .relative {
+        min-height: 320px;
+      }
+    }
+    /* Reserve space for form section */
+    #contact-form {
+      min-height: 600px;
+    }
+    /* Fix aspect ratios for images */
+    img[width][height] {
+      aspect-ratio: attr(width) / attr(height);
+    }
+    /* Reserve space for navbar logo */
+    nav svg {
+      width: auto;
+      height: 40px;
+      min-width: 200px;
+    }
+    /* Font loading is handled by Google Fonts with display=swap */
+    /* Reserve space for buttons to prevent shift */
+    button {
+      min-height: 44px;
+    }
+    /* Reserve space for hero badge */
+    .inline-flex {
+      min-height: 28px;
+    }
+    /* Prevent shift from images loading */
+    img:not([src=""]) {
+      background-color: #f3f4f6;
+    }
+    /* Mobile-specific CLS fixes */
+    @media (max-width: 767px) {
+      section {
+        min-height: auto;
+      }
+      /* Reserve space for hero section on mobile */
+      section:first-of-type {
+        min-height: 100vh;
+      }
+      /* Fix form inputs on mobile */
+      input, select {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+    }
     /* Увеличиваем ширину карточек в секции "We build websites for" на десктопе */
     @media (min-width: 1024px) {
       #specialties-section .grid > div {
@@ -282,7 +409,17 @@
       const script = document.createElement('script');
       script.src = 'https://cdn.tailwindcss.com';
       script.async = true;
+      script.onload = function() {
+        // Mark body as loaded to prevent CLS
+        document.body.classList.add('loaded');
+      };
       document.head.appendChild(script);
+      // Fallback: mark as loaded after a short delay even if script fails
+      setTimeout(function() {
+        if (!document.body.classList.contains('loaded')) {
+          document.body.classList.add('loaded');
+        }
+      }, 100);
     }
   </script>
   
@@ -302,9 +439,9 @@
       fbq('track', 'PageView');
     });
   </script>
-  <noscript><img height="1" width="1" style="display:none"
+  <noscript><img height="1" width="1" style="display:none; position: absolute;"
   src="https://www.facebook.com/tr?id=4530724333821963&ev=PageView&noscript=1"
-  /></noscript>
+  class="fb-pixel" /></noscript>
   <!-- End Meta Pixel Code -->
 </head>
 <body>
@@ -345,7 +482,7 @@
       </div>
     </div>
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-[#FAFAFA] shadow-xl border-t border-gray-200/50 p-4">
+    <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-[#FAFAFA] shadow-xl border-t border-gray-200/50 p-4" style="max-height: 0; overflow: hidden;">
       <a href="#pain" class="block py-3 px-4 rounded-lg hover:bg-gray-50 text-gray-600 font-medium" onclick="closeMobileMenu()">Why It Matters</a>
       <a href="#portfolio" class="block py-3 px-4 rounded-lg hover:bg-gray-50 text-gray-600 font-medium" onclick="closeMobileMenu()">Our Work</a>
       <a href="#price" class="block py-3 px-4 rounded-lg hover:bg-gray-50 text-gray-600 font-medium" onclick="closeMobileMenu()">Price</a>
@@ -357,7 +494,7 @@
 
   <!-- Hero Section -->
   <section class="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
-    <div class="absolute inset-0 z-0">
+    <div class="absolute inset-0 z-0 hero-image-container">
       <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=75" srcset="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=75 400w, https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=75 800w, https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800&q=80 1200w" sizes="100vw" alt="Construction Site Background" width="1920" height="1080" class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async" />
       <div class="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/60"></div>
       <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
@@ -395,7 +532,7 @@
         </div>
 
         <!-- Phone Mockups -->
-        <div class="relative h-[450px] md:h-[600px] flex justify-center items-center perspective-1000">
+        <div class="relative h-[450px] md:h-[600px] flex justify-center items-center perspective-1000 phone-mockup-container">
           <div class="absolute left-0 lg:-left-4 top-20 w-40 md:w-52 bg-[#1A1A1A] rounded-[2rem] border-[8px] border-[#2a2a2a] shadow-2xl transform -rotate-12 translate-z-0 scale-90 z-10 transition-transform hover:-translate-y-2 duration-500">
             <div class="h-full bg-[#FAFAFA] rounded-[1.4rem] overflow-hidden flex flex-col relative">
               <div class="h-full w-full relative">
@@ -484,8 +621,8 @@
       
       <div class="grid md:grid-cols-3 gap-8 md:gap-12">
         <div class="group p-6 bg-[#FAFAFA] border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-left">
-          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75" srcset="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75 400w, https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=80 800w" sizes="(max-width: 768px) 100vw, 50vw" width="600" height="200" alt="Invisible on Maps" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" />
+          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative" style="aspect-ratio: 3/1;">
+            <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75" srcset="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75 400w, https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=80 800w" sizes="(max-width: 768px) 100vw, 50vw" width="600" height="200" alt="Invisible on Maps" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" style="aspect-ratio: 3/1;" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent"></div>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
@@ -497,8 +634,8 @@
         </div>
 
         <div class="group p-6 bg-[#FAFAFA] border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-left">
-          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative bg-gray-200">
-            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75" srcset="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75 400w, https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=80 800w" sizes="(max-width: 768px) 100vw, 50vw" alt="No Trust Factor" width="600" height="200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574757987642-5755f083910d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75';" />
+          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative bg-gray-200" style="aspect-ratio: 3/1;">
+            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75" srcset="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75 400w, https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=80 800w" sizes="(max-width: 768px) 100vw, 50vw" alt="No Trust Factor" width="600" height="200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" style="aspect-ratio: 3/1;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574757987642-5755f083910d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75';" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent"></div>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
@@ -510,8 +647,8 @@
         </div>
 
         <div class="group p-6 bg-[#FAFAFA] border border-gray-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden text-left">
-          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75" srcset="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75 400w, https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=80 800w" sizes="(max-width: 768px) 100vw, 50vw" width="600" height="200" alt="Hard to Contact" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" />
+          <div class="h-32 -mx-6 -mt-6 mb-6 overflow-hidden relative" style="aspect-ratio: 3/1;">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75" srcset="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=150&q=75 400w, https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=200&q=80 800w" sizes="(max-width: 768px) 100vw, 50vw" width="600" height="200" alt="Hard to Contact" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0" loading="lazy" decoding="async" style="aspect-ratio: 3/1;" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent"></div>
           </div>
           <h3 class="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
@@ -820,10 +957,14 @@
         document.addEventListener('DOMContentLoaded', function() {
           const yearEl = document.getElementById('currentYear');
           if (yearEl) yearEl.textContent = new Date().getFullYear();
+          // Mark body as loaded
+          document.body.classList.add('loaded');
         });
       } else {
         const yearEl = document.getElementById('currentYear');
         if (yearEl) yearEl.textContent = new Date().getFullYear();
+        // Mark body as loaded
+        document.body.classList.add('loaded');
       }
 
       // Navbar scroll effect (debounced for performance)
@@ -880,12 +1021,22 @@
       // Mobile menu
       function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
-        if (menu) menu.classList.toggle('hidden');
+        if (menu) {
+          menu.classList.toggle('hidden');
+          if (!menu.classList.contains('hidden')) {
+            menu.style.maxHeight = '500px';
+          } else {
+            menu.style.maxHeight = '0';
+          }
+        }
       }
 
       function closeMobileMenu() {
         const menu = document.getElementById('mobileMenu');
-        if (menu) menu.classList.add('hidden');
+        if (menu) {
+          menu.classList.add('hidden');
+          menu.style.maxHeight = '0';
+        }
       }
 
       // Scroll to form
