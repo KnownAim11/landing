@@ -1066,6 +1066,15 @@
 
       if (proposalForm) {
         proposalForm.addEventListener('submit', async (e) => {
+      // Track Google Ads conversion when form is submitted
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17913727585/VHUzCJ7l2O4bEOGU991C',
+          'value': 1.0,
+          'currency': 'CZK'
+        });
+      }
+      
       // Don't track Lead here - it will be tracked on thank-you page
       // Get form data
       const formData = new FormData(proposalForm);
